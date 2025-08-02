@@ -1,18 +1,22 @@
+const API_KEY = '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';  // Вставь сюда свой токен Hugging Face
+
 async function sendMessage() {
   const userInput = document.getElementById('userInput').value.trim();
   const responseDiv = document.getElementById('response');
+
   if (!userInput) {
     responseDiv.innerText = "Пожалуйста, введите вопрос.";
     return;
   }
+
   responseDiv.innerHTML = "⏳ TunAI думает...";
 
   try {
     const res = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
-        // Без API-ключа - публичный доступ
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${API_KEY}`
       },
       body: JSON.stringify({ inputs: userInput })
     });
@@ -23,8 +27,8 @@ async function sendMessage() {
 
     const data = await res.json();
 
-    // Некоторые модели возвращают массив с generated_text
     let reply = "";
+
     if (Array.isArray(data) && data.length > 0) {
       reply = data[0].generated_text || "🤖 Нет ответа";
     } else if (data.generated_text) {
@@ -34,6 +38,7 @@ async function sendMessage() {
     }
 
     responseDiv.innerText = reply;
+
   } catch (err) {
     console.error(err);
     responseDiv.innerText = "⚠️ Ошибка при подключении к ИИ. Попробуйте позже.";

@@ -1,30 +1,28 @@
+const API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1";
+
 async function sendMessage() {
-  const input = document.getElementById("userInput").value.trim();
+  const input = document.getElementById("input").value;
   const responseDiv = document.getElementById("response");
-
-  if (!input) {
-    responseDiv.innerText = "Введите сообщение.";
-    return;
-  }
-
-  responseDiv.innerText = "Идёт генерация ответа...";
+  responseDiv.textContent = "Генерация ответа...";
 
   try {
-    const res = await fetch("https://api-inference.huggingface.co/models/mosaicml/mpt-7b-chat", {
+    const res = await fetch(API_URL, {
       method: "POST",
       headers: {
-        "Authorization": "Bearer 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",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ inputs: input })
+      body: JSON.stringify({
+        inputs: input
+      })
     });
 
-    if (!res.ok) throw new Error("Ошибка запроса");
-    const data = await res.json();
+    if (!res.ok) throw new Error("Ошибка запроса к ИИ");
 
-    responseDiv.innerText = data?.[0]?.generated_text || "Нет ответа.";
-  } catch (e) {
-    responseDiv.innerText = "Ошибка при подключении к ИИ.";
-    console.error(e);
+    const data = await res.json();
+    if (data.error) throw new Error(data.error);
+
+    responseDiv.textContent = data[0]?.generated_text || "Нет ответа.";
+  } catch (err) {
+    responseDiv.textContent = "Ошибка: " + err.message;
   }
 }

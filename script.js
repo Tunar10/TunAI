@@ -1,5 +1,5 @@
 const API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1";
-const HF_TOKEN = "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"; // 👈 сюда вставь свой API токен
+const HF_TOKEN = "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"; // 👈 сюда вставь свой API токен
 
 async function sendMessage() {
   const input = document.getElementById("input").value;

@@ -12,15 +12,14 @@ async function sendMessage() {
   responseDiv.innerHTML = "⏳ TunAI думает...";
 
   try {
-    const res = await fetch("https://api-inference.huggingface.co/models/gpt2", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    "Authorization": `Bearer ${API_KEY}`
-  },
-  body: JSON.stringify({ inputs: userInput })
-});
-
+    const res = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${API_KEY}`
+      },
+      body: JSON.stringify({ inputs: userInput })
+    });
 
     if (!res.ok) {
       throw new Error(`Ошибка сервера: ${res.status}`);
